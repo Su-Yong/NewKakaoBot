@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">KakaoBot</string>
+    <string name="title_log">Log</string>
+    <string name="title_debug">Debug</string>
+    <string name="title_setting">Setting</string>
+    <string name="room">Room</string>
+    <string name="sender">Sender</string>
+    <string name="setting_power">Using KakaoBot</string>
+    <string name="setting_reload">Script reload</string>
+    <string name="setting_script_go">Edit script</string>
+</resources>

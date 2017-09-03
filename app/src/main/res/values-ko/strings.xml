@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KakaoBot</string>
+    <string name="title_log">로그</string>
+    <string name="title_debug">디버그</string>
+    <string name="title_setting">설정</string>
+    <string name="room">방</string>
+    <string name="sender">전송자</string>
+    <string name="setting_power">카카오봇 사용</string>
+    <string name="setting_reload">스크립트 재시작</string>
+    <string name="setting_script_go">스크립트 편집</string>
+</resources>

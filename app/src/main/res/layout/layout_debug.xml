@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/debug_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#00000000" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/debug_chat_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chat_bar_height">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/debug_chat_room"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/chat_bar_height"
+                android:ems="3"
+                android:hint="@string/room"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/debug_chat_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/chat_bar_height"
+                android:ems="3"
+                android:hint="@string/sender"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/debug_chat_edit"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/chat_bar_height"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <ImageButton
+                android:id="@+id/debug_chat_send"
+                android:layout_width="@dimen/chat_bar_height"
+                android:layout_height="@dimen/chat_bar_height"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_send_black_24dp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
