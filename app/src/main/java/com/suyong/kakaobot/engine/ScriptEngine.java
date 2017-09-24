@@ -1,10 +1,15 @@
 package com.suyong.kakaobot.engine;
 
+import android.content.Intent;
 import android.os.Process;
 
+import com.suyong.kakaobot.KakaoManager;
 import com.suyong.kakaobot.Logger;
+import com.suyong.kakaobot.ScriptEngineService;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EcmaError;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.Script;
@@ -28,11 +33,12 @@ public class ScriptEngine {
     }
 
     public void start() {
-        script = context.compileString(source, name, 0, null);
-        globalScope = context.initStandardObjects();
-
         try {
+            script = context.compileString(source, name, 0, null);
+            globalScope = context.initStandardObjects();
+
             ScriptableObject.defineClass(globalScope, ScriptBot.class);
+
             script.exec(context, globalScope);
         } catch (JavaScriptException e) {
             e.printStackTrace();
@@ -42,17 +48,27 @@ public class ScriptEngine {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
+        } catch (EvaluatorException e) {
+            KakaoManager.getInstance().receiveError(e);
+        } catch (EcmaError e) {
+            KakaoManager.getInstance().receiveError(e);
         }
     }
 
     public void stop() {
-        Context.exit();
-        Process.killProcess(Process.myPid());
+        try {
+            Context.exit();
+        } catch (IllegalStateException err) {}
     }
 
     public void setScript(String src) {
         if(src != null)
             this.source = src;
+    }
+
+    public void setName(String name) {
+        if(name != null)
+            this.name = name;
     }
 
     public void invokeFunction(String name, Object... parameters) {
@@ -66,12 +82,18 @@ public class ScriptEngine {
             int i = 0;
             for(Object p : parameters) {
                 i++;
-                params += String.valueOf(p);
+                params += " -> " + String.valueOf(p);
                 if(i != parameters.length) {
-                    params += ", ";
+                    params += "\n";
                 }
             }
-            Logger.getInstance().add(Logger.Type.COMMON, "call function: " + name + ", parameters: " + params);
+
+            Logger.Log log = new Logger.Log();
+            log.type = Logger.Type.APP;
+            log.title = "function \"" + name + "\" is called";
+            log.index = "parameters\n" + params;
+
+            Logger.getInstance().add(log);
         }
     }
 }

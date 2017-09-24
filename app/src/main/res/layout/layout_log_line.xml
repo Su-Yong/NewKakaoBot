@@ -1,12 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/log_padding">
 
-    <TextView
-        android:id="@+id/log_text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/log_icon"
+            android:layout_width="@dimen/log_icon_size"
+            android:layout_height="@dimen/log_icon_size"
+            app:srcCompat="@drawable/ic_assignment_black_24dp" />
+
+        <TextView
+            android:id="@+id/log_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/log_icon_size"
+            android:layout_gravity="center_vertical|center"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/normal_padding"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/log_date"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/log_icon_size"
+            android:layout_marginLeft="@dimen/normal_padding" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/log_color"
+            android:layout_width="@dimen/log_bar_size"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/log_bar_padding"
+            android:layout_marginTop="@dimen/normal_padding"
+            android:background="?android:attr/colorPrimary" />
+
+        <TextView
+            android:id="@+id/log_index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/log_text_padding"
+            android:text="index" />
+    </LinearLayout>
+
 </LinearLayout>

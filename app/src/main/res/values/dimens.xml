@@ -1,6 +1,12 @@
 <resources>
+    <dimen name="normal_padding">4dp</dimen>
     <dimen name="chat_bar_height">56dp</dimen>
     <dimen name="chat_card_radius">4dp</dimen>
     <dimen name="chat_card_padding">4dp</dimen>
     <dimen name="setting_card_padding">16dp</dimen>
+    <dimen name="log_icon_size">24dp</dimen>
+    <dimen name="log_padding">8dp</dimen>
+    <dimen name="log_bar_size">2dp</dimen>
+    <dimen name="log_bar_padding">16dp</dimen>
+    <dimen name="log_text_padding">12dp</dimen>
 </resources>

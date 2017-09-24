@@ -23,30 +23,23 @@ public class KakaoTalkListener extends NotificationListenerService {
     private static Context context;
 
     @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
-        super.onNotificationPosted(sbn);
+    public void onNotificationPosted(StatusBarNotification statusBarNotification) {
+        super.onNotificationPosted(statusBarNotification);
 
-        if(context == null) {
-            context = getApplicationContext();
-        }
+        if(statusBarNotification.getPackageName().equals(KAKAO_TALK)) {
+            Notification.WearableExtender extender = new Notification.WearableExtender(statusBarNotification.getNotification());
 
-        Log.d("Notify", sbn.getPackageName() + ":");
-
-        if(sbn.getPackageName().equals(KAKAO_TALK)) {
-            Notification.WearableExtender wExt = new Notification.WearableExtender(sbn.getNotification());
-            for(Notification.Action act : wExt.getActions()) {
+            for(Notification.Action act : extender.getActions()) {
                 if(act.getRemoteInputs() != null && act.getRemoteInputs().length > 0) {
-                    if(act.title.toString().toLowerCase().contains("reply") ||
-                       act.title.toString().toLowerCase().contains("Reply") ||
-                       act.title.toString().toLowerCase().contains("답장")) {
-                        Object title = sbn.getNotification().extras.getString("android.title");
-                        Object text = sbn.getNotification().extras.get("android.text");
+                    context = getApplicationContext();
 
-                        KakaoData data = getKakaoData(title.toString(), text);
-                        data.session = act;
+                    Object title = statusBarNotification.getNotification().extras.getString("android.title");
+                    Object text = statusBarNotification.getNotification().extras.get("android.text");
 
-                        KakaoManager.getInstance().addKakaoData(data);
-                    }
+                    KakaoData data = getKakaoData(title.toString(), text);
+                    data.session = act;
+
+                    KakaoManager.getInstance().addKakaoData(data);
                 }
             }
         }
@@ -74,6 +67,13 @@ public class KakaoTalkListener extends NotificationListenerService {
 
         try {
             session.actionIntent.send(context, 0, sendIntent);
+
+            Logger.Log log = new Logger.Log();
+            log.type = Logger.Type.APP;
+            log.title = "send message";
+            log.index = "room: " + room +"\nmessage: " + message;
+
+            Logger.getInstance().add(log);
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }

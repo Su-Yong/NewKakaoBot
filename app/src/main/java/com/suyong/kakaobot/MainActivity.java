@@ -1,11 +1,19 @@
 package com.suyong.kakaobot;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,22 +24,32 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.suyong.kakaobot.engine.ScriptEngine;
 
 import java.io.File;
 
+import static android.content.pm.PackageManager.PERMISSION_DENIED;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private static final int PERMISSION_READ = 0;
+    private static final int PERMISSION_WRITE = 1;
+    private static final int PERMISSION_INTERNET = 2;
+    private static final int PERMISSION_ALL = 3;
+    private static final int PERMISSION_OVERLAY = 4;
+
     public static DebugChatAdapter adapter;
 
-    private LinearLayout logLayout;
+    private FrameLayout logLayout;
     private LinearLayout debugLayout;
     private LinearLayout settingLayout;
 
     private ListView logList;
+    private FloatingActionButton deleteLog;
 
     private ListView debugChat;
     private EditText debugEdit;
@@ -39,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private EditText debugEditSender;
     private ImageButton debugSend;
 
-    private Switch settingPower;
+    public static Switch settingPower;
+    private ImageButton settingPermission;
     private ImageButton settingReload;
     private ImageButton settingEdit;
 
@@ -49,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         KakaoManager.getInstance().isForeground = true;
+        KakaoManager.getInstance().setContext(this);
         FileManager.getInstance().init();
-        KakaoManager.getInstance().start();
         Logger.getInstance().init();
 
         logLayout =  findViewById(R.id.main_log);
@@ -61,8 +80,42 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initLogLayout();
         initSettingLayout();
 
+        checkPermission();
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        KakaoManager.getInstance().isForeground = true;
+    }
+
+    private void checkPermission() {
+        String[] permissions = new String[] {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!hasPermissions(permissions)) {
+                requestPermissions(permissions, PERMISSION_ALL);
+            }
+        }
+    }
+
+    public boolean hasPermissions(String[] permissions) {
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (String permission : permissions) {
+                if (checkSelfPermission(permission) == PERMISSION_DENIED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void initDebugLayout() {
@@ -78,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         debugSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!debugEdit.getText().toString().trim().equals("")) {
+                if(!debugEdit.getText().toString().trim().equals("") && KakaoManager.getInstance().isRunning()) {
                     adapter.addPersonChat(debugEdit.getText().toString().trim());
 
                     KakaoManager.KakaoData data = new KakaoManager.KakaoData();
@@ -96,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void initLogLayout() {
         logList = findViewById(R.id.log_list);
+        deleteLog = findViewById(R.id.delete_log);
 
         final LogAdapter log = new LogAdapter();
         logList.setAdapter(log);
@@ -103,7 +157,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         Logger.getInstance().setLogChangedListener(new Logger.OnLogChangedListener() {
             @Override
-            public void onChanged(Logger.Type type, String str) {
+            public void onChanged(Logger.Log l) {
+                log.notifyDataSetChanged();
+            }
+        });
+
+        final Context ctx = this;
+        deleteLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileManager.getInstance().delete(FileManager.LOG);
+                Toast.makeText(ctx, getString(R.string.delete_log), Toast.LENGTH_SHORT).show();
+                Logger.getInstance().deleteLog();
+
                 log.notifyDataSetChanged();
             }
         });
@@ -111,12 +177,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void initSettingLayout() {
         settingPower = findViewById(R.id.setting_power_switch);
+        settingPermission = findViewById(R.id.setting_give_permission_button);
         settingReload = findViewById(R.id.setting_reload_script_button);
         settingEdit = findViewById(R.id.setting_edit_script_button);
 
+        settingPower.setChecked(KakaoManager.getInstance().isRunning());
         settingPower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Log.d("power", KakaoManager.getInstance().isRunning() + "");
                 if(b) {
                     KakaoManager.getInstance().start();
                 } else {
@@ -124,20 +193,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
             }
         });
+        settingPermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+            }
+        });
         settingReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                KakaoManager.getInstance().reload();
+                if(KakaoManager.getInstance().isRunning())
+                    KakaoManager.getInstance().reload();
             }
         });
         settingEdit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {Intent intent = new Intent(Intent.ACTION_EDIT);
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ScriptEditActivity.class));
+                /*Intent intent = new Intent(Intent.ACTION_EDIT);
                 Uri uri = Uri.parse("file://" + new File(FileManager.getInstance().KAKAOBOT_HOME, FileManager.getInstance().SCRIPT_NAME).getPath());
                 intent.setDataAndType(uri, "text/plain");
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
+    }
+
+    public static void UIThread(Runnable runnable) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(runnable, 0);
     }
 
     @Override
@@ -160,6 +244,42 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
         }
         return false;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ALL:
+                if (grantResults[0] == PERMISSION_DENIED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,}, PERMISSION_READ);
+
+                }
+                break;
+            case PERMISSION_READ:
+                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
+
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,}, PERMISSION_READ);
+
+                }
+                break;
+            case PERMISSION_WRITE:
+                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
+                    // TODO
+                } else {
+                    // TODO
+                }
+                break;
+            case PERMISSION_INTERNET:
+                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
+                    // TODO
+                } else {
+                    // TODO
+                }
+                break;
+        }
     }
 
     @Override

@@ -65,7 +65,13 @@ public class DebugChatAdapter extends BaseAdapter {
         list.add(data);
 
         this.notifyDataSetChanged();
-        Logger.getInstance().add(Logger.Type.DEBUG, " -> Bot: " + message);
+
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.APP;
+        log.title = "Debuging Chat: BOT";
+        log.index = message;
+
+        Logger.getInstance().add(log);
     }
 
     public void addPersonChat(String message) {
@@ -76,7 +82,13 @@ public class DebugChatAdapter extends BaseAdapter {
         list.add(data);
 
         this.notifyDataSetChanged();
-        Logger.getInstance().add(Logger.Type.DEBUG, "Person: " + message);
+
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.APP;
+        log.title = "Debuging Chat: PERSON";
+        log.index = message;
+
+        Logger.getInstance().add(log);
     }
 
     private class ChatData {

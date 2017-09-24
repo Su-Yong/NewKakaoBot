@@ -8,4 +8,9 @@
     <string name="setting_power">Using KakaoBot</string>
     <string name="setting_reload">Script reload</string>
     <string name="setting_script_go">Edit script</string>
+    <string name="delete_log">Logs are deleted</string>
+    <string name="give_permission">Give reading notification permission</string>
+    <string name="save">save</string>
+    <string name="running">KakaoBot is Running...</string>
+    <string name="save_script">Saved</string>
 </resources>

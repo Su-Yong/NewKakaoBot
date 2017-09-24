@@ -9,4 +9,9 @@
     <string name="setting_power">카카오봇 사용</string>
     <string name="setting_reload">스크립트 재시작</string>
     <string name="setting_script_go">스크립트 편집</string>
+    <string name="delete_log">로그가 모두 지워졌습니다.</string>
+    <string name="give_permission">알림 읽기 권한 주기</string>
+    <string name="save">저장</string>
+    <string name="running">카카오 봇이 작동 중 입니다</string>
+    <string name="save_script">저장 완료</string>
 </resources>
