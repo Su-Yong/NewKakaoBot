@@ -14,4 +14,5 @@
     <string name="save">저장</string>
     <string name="running">카카오 봇이 작동 중 입니다</string>
     <string name="save_script">저장 완료</string>
+    <string name="help">도움말</string>
 </resources>

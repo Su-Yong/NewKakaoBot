@@ -20,12 +20,17 @@ public class ScriptBot extends ScriptableObject {
     }
 
     @JSStaticFunction
-    public static void send(String room, String message) {
+    public static void send(String room, final String message) {
         try {
             KakaoTalkListener.send(room, message);
         } catch(IllegalArgumentException err) {
             if(KakaoManager.getInstance().isForeground) {
-                MainActivity.adapter.addBotChat(message);
+                MainActivity.UIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.adapter.addBotChat(message);
+                    }
+                });
             }
         }
     }

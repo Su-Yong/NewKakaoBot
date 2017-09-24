@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private ListView logList;
     private FloatingActionButton deleteLog;
+    private FloatingActionButton goDown;
 
     private ListView debugChat;
     private EditText debugEdit;
@@ -58,9 +59,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ImageButton debugSend;
 
     public static Switch settingPower;
-    private ImageButton settingPermission;
-    private ImageButton settingReload;
-    private ImageButton settingEdit;
+    private LinearLayout settingPermission;
+    private LinearLayout settingReload;
+    private LinearLayout settingEdit;
+    private LinearLayout settingHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void initLogLayout() {
         logList = findViewById(R.id.log_list);
         deleteLog = findViewById(R.id.delete_log);
+        goDown = findViewById(R.id.go_down);
 
         final LogAdapter log = new LogAdapter();
         logList.setAdapter(log);
@@ -173,13 +176,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 log.notifyDataSetChanged();
             }
         });
+        goDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logList.setSelection(log.getCount() - 1);
+            }
+        });
     }
 
     private void initSettingLayout() {
         settingPower = findViewById(R.id.setting_power_switch);
-        settingPermission = findViewById(R.id.setting_give_permission_button);
-        settingReload = findViewById(R.id.setting_reload_script_button);
-        settingEdit = findViewById(R.id.setting_edit_script_button);
+        settingPermission = findViewById(R.id.setting_give_permission_layout);
+        settingReload = findViewById(R.id.setting_reload_script_layout);
+        settingEdit = findViewById(R.id.setting_edit_script_layout);
+        settingHelp = findViewById(R.id.setting_etc_help_layout);
 
         settingPower.setChecked(KakaoManager.getInstance().isRunning());
         settingPower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -211,10 +221,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ScriptEditActivity.class));
-                /*Intent intent = new Intent(Intent.ACTION_EDIT);
-                Uri uri = Uri.parse("file://" + new File(FileManager.getInstance().KAKAOBOT_HOME, FileManager.getInstance().SCRIPT_NAME).getPath());
-                intent.setDataAndType(uri, "text/plain");
-                startActivity(intent);*/
+            }
+        });
+        settingHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Su-Yong/NewKakaoBot/blob/master/API.md"));
+                startActivity(intent);
             }
         });
     }

@@ -37,7 +37,9 @@ public class ScriptEngine {
             script = context.compileString(source, name, 0, null);
             globalScope = context.initStandardObjects();
 
+            ScriptUtil.init(context, globalScope);
             ScriptableObject.defineClass(globalScope, ScriptBot.class);
+            ScriptableObject.defineClass(globalScope, ScriptUtil.class);
 
             script.exec(context, globalScope);
         } catch (JavaScriptException e) {
@@ -53,6 +55,14 @@ public class ScriptEngine {
         } catch (EcmaError e) {
             KakaoManager.getInstance().receiveError(e);
         }
+    }
+
+    public ScriptableObject getGlobalScope() {
+        return globalScope;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public void stop() {
@@ -76,8 +86,11 @@ public class ScriptEngine {
 
         if(func != null) {
             Context.enter();
-            func.call(context, globalScope, globalScope, parameters);
-
+            try {
+                func.call(context, globalScope, globalScope, parameters);
+            } catch (EcmaError err) {
+                KakaoManager.getInstance().receiveError(err);
+            }
             String params = "";
             int i = 0;
             for(Object p : parameters) {

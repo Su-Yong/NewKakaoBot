@@ -13,4 +13,5 @@
     <string name="save">save</string>
     <string name="running">KakaoBot is Running...</string>
     <string name="save_script">Saved</string>
+    <string name="help">Help</string>
 </resources>
