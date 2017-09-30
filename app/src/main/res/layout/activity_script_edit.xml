@@ -6,21 +6,36 @@
     android:layout_height="match_parent"
     tools:context="com.suyong.kakaobot.ScriptEditActivity">
 
-    <xyz.iridiumion.iridiumhighlightingeditor.editor.IridiumHighlightingEditorJ
-        android:id="@+id/editor"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="#EEEEEE"
-        android:gravity="top|left"
-        android:padding="4dp"
-        android:textSize="14sp"
-        android:typeface="monospace"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <xyz.iridiumion.iridiumhighlightingeditor.editor.IridiumHighlightingEditorJ
+                android:id="@+id/editor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EEEEEE"
+                android:gravity="top|left"
+                android:isScrollContainer="true"
+                android:textSize="14sp"
+                android:typeface="monospace"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </HorizontalScrollView>
+
+    </ScrollView>
+
 </android.support.constraint.ConstraintLayout>

@@ -44,4 +44,27 @@ public class ScriptBot extends ScriptableObject {
     public static Object readData(String key) {
         return FileManager.getInstance().readData(DATA, key);
     }
+
+    @JSStaticFunction
+    public static void removeData(String key) {
+        FileManager.getInstance().removeData(DATA, key);
+    }
+
+    @JSStaticFunction
+    public static void initData(String key, String value) {
+        Object data = FileManager.getInstance().readData(DATA, key);
+        if(data == null) {
+            FileManager.getInstance().saveData(DATA, key, value);
+        }
+    }
+
+    @JSStaticFunction
+    public static Object getDataList() {
+        return FileManager.getInstance().readToJson(DATA);
+    }
+
+    @JSStaticFunction
+    public static Object getContext() {
+        return MainActivity.context;
+    }
 }

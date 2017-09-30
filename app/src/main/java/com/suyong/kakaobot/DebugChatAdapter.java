@@ -12,6 +12,12 @@ import java.util.ArrayList;
 
 public class DebugChatAdapter extends BaseAdapter {
     private ArrayList<ChatData> list = new ArrayList<>();
+    private OnChatListener listener = new OnChatListener() {
+        @Override
+        public void onChatted(ChatData data) {
+            // Nothing
+        }
+    };
 
     @Override
     public int getCount() {
@@ -39,9 +45,26 @@ public class DebugChatAdapter extends BaseAdapter {
             switch(type) {
                 case 0:
                     view = inflater.inflate(R.layout.chat_person, null);
+                    view.setTag(0);
                     break;
                 case 1:
                     view = inflater.inflate(R.layout.chat_bot, null);
+                    view.setTag(1);
+                    break;
+            }
+        }
+
+        if(type != (int) view.getTag()) {
+            LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            switch(type) {
+                case 0:
+                    view = inflater.inflate(R.layout.chat_person, null);
+                    view.setTag(0);
+                    break;
+                case 1:
+                    view = inflater.inflate(R.layout.chat_bot, null);
+                    view.setTag(1);
                     break;
             }
         }
@@ -57,6 +80,10 @@ public class DebugChatAdapter extends BaseAdapter {
         return list.get(p).isPerson ? 0 : 1;
     }
 
+    public void setOnChatListener(OnChatListener listener) {
+        this.listener = listener;
+    }
+
     public void addBotChat(String message) {
         ChatData data = new ChatData();
         data.isPerson = false;
@@ -68,10 +95,12 @@ public class DebugChatAdapter extends BaseAdapter {
 
         Logger.Log log = new Logger.Log();
         log.type = Logger.Type.APP;
-        log.title = "Debuging Chat: BOT";
+        log.title = "Chat (DEBUG): BOT";
         log.index = message;
 
         Logger.getInstance().add(log);
+
+        listener.onChatted(data);
     }
 
     public void addPersonChat(String message) {
@@ -85,13 +114,20 @@ public class DebugChatAdapter extends BaseAdapter {
 
         Logger.Log log = new Logger.Log();
         log.type = Logger.Type.APP;
-        log.title = "Debuging Chat: PERSON";
+        log.title = "Chat (DEBUG)";
         log.index = message;
 
         Logger.getInstance().add(log);
+
+        listener.onChatted(data);
     }
 
-    private class ChatData {
+
+    public interface OnChatListener {
+        void onChatted(ChatData data);
+    }
+
+    public class ChatData {
         public boolean isPerson = false;
         public String text = "";
     }

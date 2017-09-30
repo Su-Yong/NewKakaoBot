@@ -1,5 +1,7 @@
 package com.suyong.kakaobot.engine;
 
+import com.suyong.kakaobot.Logger;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -80,5 +82,15 @@ public class ScriptUtil extends ScriptableObject {
                 }
             }
         }).start();
+    }
+
+    @JSStaticFunction
+    public static void log(String title, String message) {
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.SCRIPT;
+        log.title = title;
+        log.index = message;
+
+        Logger.getInstance().add(log);
     }
 }

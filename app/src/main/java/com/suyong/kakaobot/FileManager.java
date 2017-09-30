@@ -106,6 +106,36 @@ public class FileManager {
             e.printStackTrace();
         }
     }
+
+    public void removeData(String path, String key) {
+        createFile(path);
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(new File(KAKAOBOT_HOME, path)));
+
+            String line;
+            StringBuilder result = new StringBuilder();
+            while((line = reader.readLine()) != null) {
+                result.append(line);
+                result.append("\n");
+            }
+
+            JSONObject json = new JSONObject(result.toString() + "");
+            json.remove(key);
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(KAKAOBOT_HOME, path)));
+
+            writer.write(json.toString());
+
+            reader.close();
+            writer.close();
+        } catch(IOException err) {
+            err.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Object readData(String path, String key) {
         String result = null;
 
@@ -120,6 +150,31 @@ public class FileManager {
                     result = json.get(key) + "";
                 }
             }
+
+            reader.close();
+        } catch(IOException err) {
+            err.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public Object readToJson(String path) {
+        JSONObject result = null;
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(new File(KAKAOBOT_HOME, path)));
+
+            String line;
+            StringBuilder str = new StringBuilder();
+            while((line = reader.readLine()) != null) {
+                str.append(line);
+                str.append("\n");
+            }
+
+            result = new JSONObject(str.toString());
 
             reader.close();
         } catch(IOException err) {

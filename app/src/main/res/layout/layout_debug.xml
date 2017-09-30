@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="#00000000" />
+        android:divider="#00000000"
+        android:fastScrollAlwaysVisible="true"
+        android:fastScrollEnabled="true" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/debug_chat_bar"

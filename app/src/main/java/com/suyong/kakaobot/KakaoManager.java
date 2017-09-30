@@ -74,6 +74,13 @@ public class KakaoManager {
                 }
             });
         }
+
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.ERROR;
+        log.title = err.getName();
+        log.index = "at (" + err.lineNumber() + ", " + err.columnNumber() + ")\n" + err.getErrorMessage();
+
+        Logger.getInstance().add(log);
     }
 
     public void receiveError(final EvaluatorException err) {
@@ -86,6 +93,13 @@ public class KakaoManager {
                 }
             });
         }
+
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.ERROR;
+        log.title = "Error: EvaluatorException";
+        log.index = "at (" + err.lineNumber() + ", " + err.columnNumber() + ")\n" + err.toString();
+
+        Logger.getInstance().add(log);
     }
 
     public void addKakaoData(KakaoData data) {

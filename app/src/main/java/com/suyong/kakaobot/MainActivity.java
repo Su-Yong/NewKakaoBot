@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private static final int PERMISSION_OVERLAY = 4;
 
     public static DebugChatAdapter adapter;
+    public static Context context;
 
     private FrameLayout logLayout;
     private LinearLayout debugLayout;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
 
         KakaoManager.getInstance().isForeground = true;
         KakaoManager.getInstance().setContext(this);
@@ -128,6 +131,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         debugSend = findViewById(R.id.debug_chat_send);
 
         adapter = new DebugChatAdapter();
+        adapter.setOnChatListener(new DebugChatAdapter.OnChatListener() {
+            @Override
+            public void onChatted(DebugChatAdapter.ChatData data) {
+                debugChat.setSelection(adapter.getCount() - 1);
+            }
+        });
+
         debugChat.setAdapter(adapter);
 
         debugSend.setOnClickListener(new View.OnClickListener() {
@@ -162,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onChanged(Logger.Log l) {
                 log.notifyDataSetChanged();
+                logList.setSelection(log.getCount() - 1);
             }
         });
 
@@ -198,8 +209,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Log.d("power", KakaoManager.getInstance().isRunning() + "");
                 if(b) {
                     KakaoManager.getInstance().start();
+
+                    Logger.Log log = new Logger.Log();
+                    log.type = Logger.Type.APP;
+                    log.title = "Power on";
+                    log.index = "";
+
+                    Logger.getInstance().add(log);
                 } else {
-                    KakaoManager.getInstance().stop();
+
+
+                    Logger.Log log = new Logger.Log();
+                    log.type = Logger.Type.APP;
+                    log.title = "Power off";
+                    log.index = "";
+
+                    Logger.getInstance().add(log);
                 }
             }
         });
@@ -213,8 +238,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         settingReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(KakaoManager.getInstance().isRunning())
+                if(KakaoManager.getInstance().isRunning()) {
                     KakaoManager.getInstance().reload();
+
+                    Logger.Log log = new Logger.Log();
+                    log.type = Logger.Type.APP;
+                    log.title = "Restart";
+                    log.index = "";
+
+                    Logger.getInstance().add(log);
+                }
             }
         });
         settingEdit.setOnClickListener(new View.OnClickListener() {

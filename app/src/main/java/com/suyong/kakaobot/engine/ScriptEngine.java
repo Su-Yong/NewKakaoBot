@@ -103,7 +103,7 @@ public class ScriptEngine {
 
             Logger.Log log = new Logger.Log();
             log.type = Logger.Type.APP;
-            log.title = "function \"" + name + "\" is called";
+            log.title = "call \"" + name + "\"";
             log.index = "parameters\n" + params;
 
             Logger.getInstance().add(log);

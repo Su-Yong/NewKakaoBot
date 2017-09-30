@@ -5,7 +5,9 @@ import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.Html;
@@ -33,7 +35,12 @@ public class KakaoTalkListener extends NotificationListenerService {
                 if(act.getRemoteInputs() != null && act.getRemoteInputs().length > 0) {
                     context = getApplicationContext();
 
-                    Object title = statusBarNotification.getNotification().extras.getString("android.title");
+                    Object title = null;
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        title = statusBarNotification.getNotification().extras.getString("android.summaryText");
+                    } else {
+                        title = statusBarNotification.getNotification().extras.getString("android.title");
+                    }
                     Object text = statusBarNotification.getNotification().extras.get("android.text");
 
                     KakaoData data = getKakaoData(title.toString(), text);
@@ -43,6 +50,11 @@ public class KakaoTalkListener extends NotificationListenerService {
                 }
             }
         }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return super.onBind(intent);
     }
 
     public static void send(String room, String message) throws IllegalArgumentException { // @author ManDongI

@@ -1,6 +1,5 @@
 package com.suyong.kakaobot;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.suyong.kakaobot.engine.ScriptEngine;
 
@@ -38,7 +36,7 @@ public class ScriptEngineService extends Service {
         isStart = true;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_debug_black_24dp);
+        builder.setSmallIcon(R.drawable.ic_debug_white_24dp);
         builder.setContentTitle(getString(R.string.app_name));
         builder.setContentText(getString(R.string.running));
         builder.setOngoing(true);
