@@ -50,3 +50,13 @@ Log삭제 기능을 추가하였습니다.
 특정 메소드를 추가하였습니다. (Util.delay, Util.parseToHtml, Util.parseToText)
 Log리스트 하단으로 내려가는 버튼이 추가되었습니다.
 </pre>
+
+* v2.2
+<pre>
+스크립트 에딧 화면을 개선시켰습니다.
+이제 Log에 오류가 나타납니다.
+앱 아이콘을 변경하였습니다.
+빠른 스크롤을 추가하였습니다.
+자동 스크롤을 추가하였습니다.
+특정 메소드를 추가하였습니다. (Bot.initData, Bot.removeData, Bot.getDataList, Bot.getContext, Util.log)
+</pre>
