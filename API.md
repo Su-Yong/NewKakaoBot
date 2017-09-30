@@ -11,6 +11,13 @@ Bot.saveData(key, value); 특정값을 key를 이용하여 저장합니다.
 Bot.readData(key); key를 이용해 저장한 값을 불러올 수 있습니다.
 </pre>
 
+## Util
+<pre>
+Util.delay(function(isSuccess), ms) 특정 밀리초 만큼 쉬었다가 소스를 실행합니다. (funciton의 파라미터는 성공여부)
+Util.parseToHtml(url, option, function(data, error)) 웹사이트의 특정 DOM부분을 파싱하여 HTML로 가져옵니다. (funciton의 파라미터는 데이터 값과 오류내용)
+Util.parseToText(url, option, function(data, error)) 웹사이트의 특정 DOM부분을 파싱하여 텍스트로 가져옵니다. (funciton의 파라미터는 데이터 값과 오류내용)
+</pre>
+
 # Hooks
 <pre>
 funciton catchMessage(room, sender, message) 메세지가 왔을때 호출이 됩니다.

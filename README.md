@@ -43,3 +43,10 @@ Log삭제 기능을 추가하였습니다.
 알림을 통해 작동중임을 확인할수 있습니다
 새로운 메소드가 업데이트 되었습니다. (Bot.saveData, Bot.readData)
 </pre>
+
+* v2.1
+<pre>
+오류를 잡지 못하고 튕기는 버그를 수정하였습니다.
+특정 메소드를 추가하였습니다. (Util.delay, Util.parseToHtml, Util.parseToText)
+Log리스트 하단으로 내려가는 버튼이 추가되었습니다.
+</pre>
