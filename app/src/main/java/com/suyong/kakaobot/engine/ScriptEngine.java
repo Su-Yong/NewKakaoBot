@@ -25,7 +25,7 @@ public class ScriptEngine {
     private ScriptableObject globalScope;
     private Script script;
     private String source = "";
-    private String name = "KakaoBot:Dev";
+    private String name = "KakaoBot";
 
     public ScriptEngine() {
         context = Context.enter();

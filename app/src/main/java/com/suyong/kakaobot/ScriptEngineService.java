@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -11,7 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import com.suyong.kakaobot.engine.ScriptEngine;
 
 public class ScriptEngineService extends Service {
-    private static final int RUNNING_FLAG = 1083;
+    private static final int RUNNING_FLAG = 2000;
     private static ScriptEngine engine;
 
     public static boolean isStart = false;
@@ -44,12 +45,24 @@ public class ScriptEngineService extends Service {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(RUNNING_FLAG, builder.build());
 
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.APP;
+        log.title = "Turn on the KakaoBot";
+        log.index = "turned on";
+
+        Logger.getInstance().add(log);
+
         return START_STICKY;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Nullable
@@ -67,6 +80,13 @@ public class ScriptEngineService extends Service {
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancel(RUNNING_FLAG);
+
+        Logger.Log log = new Logger.Log();
+        log.type = Logger.Type.APP;
+        log.title = "Turn off the KakaoBot";
+        log.index = "turned off";
+
+        Logger.getInstance().add(log);
 
         super.onDestroy();
     }

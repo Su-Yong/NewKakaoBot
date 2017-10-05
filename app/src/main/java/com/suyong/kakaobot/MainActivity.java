@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         adapter.setOnChatListener(new DebugChatAdapter.OnChatListener() {
             @Override
             public void onChatted(DebugChatAdapter.ChatData data) {
-                debugChat.setSelection(adapter.getCount() - 1);
+                if(debugChat.getFirstVisiblePosition() > adapter.getCount() - 5)
+                    debugChat.setSelection(adapter.getCount() - 1);
             }
         });
 
@@ -172,7 +173,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onChanged(Logger.Log l) {
                 log.notifyDataSetChanged();
-                logList.setSelection(log.getCount() - 1);
+
+                if(logList.getFirstVisiblePosition() > log.getCount() - 5)
+                    logList.setSelection(log.getCount() - 1);
             }
         });
 
@@ -209,22 +212,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Log.d("power", KakaoManager.getInstance().isRunning() + "");
                 if(b) {
                     KakaoManager.getInstance().start();
-
-                    Logger.Log log = new Logger.Log();
-                    log.type = Logger.Type.APP;
-                    log.title = "Power on";
-                    log.index = "";
-
-                    Logger.getInstance().add(log);
                 } else {
-
-
-                    Logger.Log log = new Logger.Log();
-                    log.type = Logger.Type.APP;
-                    log.title = "Power off";
-                    log.index = "";
-
-                    Logger.getInstance().add(log);
+                    KakaoManager.getInstance().stop();
                 }
             }
         });
