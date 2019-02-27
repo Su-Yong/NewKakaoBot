@@ -153,7 +153,8 @@ public class FileManager {
 
             reader.close();
         } catch(IOException err) {
-            err.printStackTrace();
+            return null;
+            //err.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }

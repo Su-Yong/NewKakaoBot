@@ -38,8 +38,10 @@ public class ScriptEngine {
             globalScope = context.initStandardObjects();
 
             ScriptUtil.init(context, globalScope);
+            ScriptUI.init(context, globalScope);
             ScriptableObject.defineClass(globalScope, ScriptBot.class);
             ScriptableObject.defineClass(globalScope, ScriptUtil.class);
+            ScriptableObject.defineClass(globalScope, ScriptUI.class);
 
             script.exec(context, globalScope);
         } catch (JavaScriptException e) {

@@ -14,4 +14,13 @@
     <string name="running">KakaoBot is Running...</string>
     <string name="save_script">Saved</string>
     <string name="help">Help</string>
+    <string name="setting_change_listener">Change listening notification</string>
+    <string name="setting_power_caption">KakaoBot option</string>
+    <string name="setting_script_caption">Script option</string>
+    <string name="setting_etc_caption">etc. option</string>
+    <string name="cafe">KakaoBot Cafe</string>
+    <string name="change_listener">Change listener</string>
+    <string name="changed">Changed</string>
+    <string name="canceled">Canceled</string>
+    <string name="write_package">Write package name</string>
 </resources>

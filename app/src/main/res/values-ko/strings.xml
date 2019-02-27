@@ -15,4 +15,13 @@
     <string name="running">카카오 봇이 작동 중 입니다</string>
     <string name="save_script">저장 완료</string>
     <string name="help">도움말</string>
+    <string name="setting_change_listener">알림 인식 앱 변경</string>
+    <string name="setting_power_caption">카카오봇 전원 옵션</string>
+    <string name="setting_script_caption">스크립트 옵션</string>
+    <string name="setting_etc_caption">기타 옵션</string>
+    <string name="cafe">카카오봇 카페</string>
+    <string name="change_listener">알림 인식 앱 변경</string>
+    <string name="changed">변경됨</string>
+    <string name="canceled">취소됨</string>
+    <string name="write_package">패키지명을 입력해주세요</string>
 </resources>

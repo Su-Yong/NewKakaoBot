@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.regex.Pattern;
 

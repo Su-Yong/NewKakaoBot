@@ -22,29 +22,34 @@ import java.util.ArrayList;
 public class KakaoTalkListener extends NotificationListenerService {
     private final static String KAKAO_TALK = "com.kakao.talk";
 
+    private static String listener = KAKAO_TALK;
     private static Context context;
 
     @Override
     public void onNotificationPosted(StatusBarNotification statusBarNotification) {
         super.onNotificationPosted(statusBarNotification);
 
-        if(statusBarNotification.getPackageName().equals(KAKAO_TALK)) {
+        if(statusBarNotification.getPackageName().equals(listener)) {
             Notification.WearableExtender extender = new Notification.WearableExtender(statusBarNotification.getNotification());
 
             for(Notification.Action act : extender.getActions()) {
                 if(act.getRemoteInputs() != null && act.getRemoteInputs().length > 0) {
                     context = getApplicationContext();
 
-                    Object title = null;
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    String title;
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         title = statusBarNotification.getNotification().extras.getString("android.summaryText");
                     } else {
                         title = statusBarNotification.getNotification().extras.getString("android.title");
                     }
                     Object text = statusBarNotification.getNotification().extras.get("android.text");
 
-                    KakaoData data = getKakaoData(title.toString(), text);
+                    KakaoData data = getKakaoData(title, text);
                     data.session = act;
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        data.sender = statusBarNotification.getNotification().extras.getString("android.title");
+                    }
 
                     KakaoManager.getInstance().addKakaoData(data);
                 }
@@ -55,6 +60,20 @@ public class KakaoTalkListener extends NotificationListenerService {
     @Override
     public IBinder onBind(Intent intent) {
         return super.onBind(intent);
+    }
+
+    public static void changeListener () {
+        try {
+            String l = FileManager.getInstance().readData(FileManager.KAKAOBOT_DATA, "listener_package").toString();
+
+            if (l.length() <= 0) {
+                listener = KAKAO_TALK;
+            } else {
+                listener = l;
+            }
+        } catch (NullPointerException e) {
+            listener = KAKAO_TALK;
+        }
     }
 
     public static void send(String room, String message) throws IllegalArgumentException { // @author ManDongI

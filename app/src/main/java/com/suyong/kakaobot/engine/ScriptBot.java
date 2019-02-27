@@ -62,9 +62,4 @@ public class ScriptBot extends ScriptableObject {
     public static Object getDataList() {
         return FileManager.getInstance().readToJson(DATA);
     }
-
-    @JSStaticFunction
-    public static Object getContext() {
-        return MainActivity.context;
-    }
 }

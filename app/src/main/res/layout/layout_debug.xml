@@ -30,7 +30,8 @@
                 android:ems="3"
                 android:hint="@string/room"
                 android:inputType="textPersonName"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="Debug Room" />
 
             <EditText
                 android:id="@+id/debug_chat_sender"
@@ -38,7 +39,8 @@
                 android:layout_height="@dimen/chat_bar_height"
                 android:ems="3"
                 android:hint="@string/sender"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="Developer" />
 
             <EditText
                 android:id="@+id/debug_chat_edit"

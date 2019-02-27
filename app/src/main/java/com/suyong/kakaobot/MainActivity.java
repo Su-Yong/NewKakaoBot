@@ -2,6 +2,7 @@ package com.suyong.kakaobot;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +25,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.suyong.kakaobot.engine.ScriptEngine;
+
+import org.mozilla.javascript.tools.jsc.Main;
 
 import java.io.File;
 
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private FrameLayout logLayout;
     private LinearLayout debugLayout;
-    private LinearLayout settingLayout;
+    private ScrollView settingLayout;
 
     private ListView logList;
     private FloatingActionButton deleteLog;
@@ -62,8 +67,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public static Switch settingPower;
     private LinearLayout settingPermission;
     private LinearLayout settingReload;
+    private LinearLayout settingChange;
     private LinearLayout settingEdit;
     private LinearLayout settingHelp;
+    private LinearLayout settingCafe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initSettingLayout();
 
         checkPermission();
+
+        KakaoTalkListener.changeListener();
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
@@ -202,8 +211,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         settingPower = findViewById(R.id.setting_power_switch);
         settingPermission = findViewById(R.id.setting_give_permission_layout);
         settingReload = findViewById(R.id.setting_reload_script_layout);
+        settingChange = findViewById(R.id.setting_change_listener_layout);
         settingEdit = findViewById(R.id.setting_edit_script_layout);
         settingHelp = findViewById(R.id.setting_etc_help_layout);
+        settingCafe = findViewById(R.id.setting_etc_cafe_layout);
 
         settingPower.setChecked(KakaoManager.getInstance().isRunning());
         settingPower.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -239,6 +250,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 }
             }
         });
+        settingChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.context).create();
+                dialog.setTitle(getString(R.string.change_listener));
+
+                final EditText editText = new EditText(MainActivity.context);
+                editText.setHint(getString(R.string.write_package));
+
+                try {
+                    editText.setText(FileManager.getInstance().readData(FileManager.KAKAOBOT_DATA, "listener_package").toString());
+                } catch(NullPointerException e) {
+                    editText.setText("");
+                }
+
+                dialog.setView(editText);
+                dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FileManager.getInstance().saveData(FileManager.KAKAOBOT_DATA, "listener_package", editText.getText());
+                        KakaoTalkListener.changeListener();
+                        Toast.makeText(MainActivity.context, getString(R.string.changed), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.context, getString(R.string.canceled), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dialog.show();
+            }
+        });
         settingEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -249,6 +293,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Su-Yong/NewKakaoBot/blob/master/API.md"));
+                startActivity(intent);
+            }
+        });
+        settingCafe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://cafe.naver.com/nameyee"));
                 startActivity(intent);
             }
         });

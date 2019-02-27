@@ -106,7 +106,7 @@ public class KakaoManager {
         dataList.add(data);
 
         if(isRunning())
-            ScriptEngineService.getEngine().invokeFunction(ScriptEngine.NOTIFICATION_LISTENER, new Object[]{data.room, data.sender, data.message});
+            ScriptEngineService.getEngine().invokeFunction(ScriptEngine.NOTIFICATION_LISTENER, new Object[]{data.room, data.sender, data.message, data.session});
 
     }
 
