@@ -60,3 +60,10 @@ Log리스트 하단으로 내려가는 버튼이 추가되었습니다.
 자동 스크롤을 추가하였습니다.
 특정 메소드를 추가하였습니다. (Bot.initData, Bot.removeData, Bot.getDataList, Bot.getContext, Util.log)
 </pre>
+
+* v2.2.1
+<pre>
+카카오봇이 꺼지지 않던 오류 해결
+자동스크롤이 상위의 항목을 보고있을때 꺼지는 기능 추가
+화면회전시 데이터가 초기화 되는 버그 해결(까먹고 이거 PlayStore에 안적)
+</pre>
